@@ -1,2 +1,37 @@
 # AICUP_GenAI_2024
-Generative-AI Navigation Information Competition for UAV Reconnaissance in Natural Environments I：Image Data Generation
+
+## 摘要
+此競賽為 AI CUP 2024 以生成式 AI 建構無人機於自然環境偵察時所需之導航資訊競賽 I－影像資料生成競賽。作為一項生成式AI比賽，目標是要根據給定的標籤圖，生成與真實空拍圖最相似的圖片，來獲得最小化FID分數。
+
+
+科技進步雖便利生活，卻也衍生環境永續挑戰。掌握國土環境資訊是實現可持續發展的關鍵。無人機能高效率偵察地形環境，有助獲取環境數據，促進綠能科技及循環經濟發展。但獲取真實影像成本高昂。生成式AI可基於少量數據生成大量逼真影像，本項目將運用此技術模擬生成無人機視野下的道路及河流景象。由於結合生成式AI與AI無人機競賽罕見，本競賽期望參賽者深入理解兩者，並將所學應用於實際場景。
+
+## 問題描述
+本競賽題目要求參賽者根據給定的黑白標籤圖，透過生成式AI模型生成對應的真實空拍影像。標籤圖中標記了河流或道路的邊界線及中軸線，需要生成能夠模擬無人機視野下的河流或道路實景影像。
+
+-標籤圖
+
+<img src="https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/a6b4865c-98b1-4f00-8b6c-795283bbcd37" height="200">
+
+
+-對應的空拍圖片
+
+<img src="https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/363dd79a-a4a8-4eef-9ef5-e21f07cf0738" height="200">
+
+
+競賽所使用的訓練資料集是由無人機以程式或人工操控的方式，在台灣各地區如台北、苗栗、台中、台南和屏東等不同縣市的道路及河流進行拍攝獲得。這些影像涵蓋了晴天、陰天及雨後等不同天氣狀況，並使用不同的拍攝角度及影像比例進行拍攝。在標註作業中，使用labelme工具對無人機拍攝影像中的道路及河流以多邊形(polygon)標註其邊界線(border)，並以折線(polyline)標註中軸線(center)。
+
+道路資料集根據天氣、拍攝角度及影像占比等因素共分為12類，河流資料集則分為18類。參賽隊伍需要開發生成式AI模型，能有效從標籤圖生成與真實影像高度相似的空拍影像輸出。
+本競賽採用FID(Fréchet Inception Distance)指標對生成影像進行評分。
+
+FID用於計算真實影像和生成影像之特徵分布的距離，分數越低表示生成影像品質越好。相關計算方式如下：
+
+
+![image](https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/d5684ee8-0508-4f38-a767-608f7b7519bd)
+
+其中 m 和 m_w 分別表示真實影像分布與生成影像分布的平均值向量；C 和 C_w分別為真實影像分布與生成影像分布的共變異數矩陣(Covariance Matrix)。
+
+
+最終分數計算的方法為河流影像與道路影像會個別計算一個FID分數，並進行加權評分得到的最終分數FINAL SCORE。
+![image](https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/f389d21e-92eb-408e-9e97-7b96f6f24947)
+

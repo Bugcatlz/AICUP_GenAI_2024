@@ -173,7 +173,7 @@ python ./model/test.py  --label_nc 0
 在執行下列的指令來進行後處理，來滿足大會要求的圖片格式：
 
 ```
-python test_postprocess --source_path {./model/result/river_local/test_latest/synthesis_image}
+python test_postprocess --source_path ./model/result/river_local/test_latest/synthesis_image
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
@@ -199,7 +199,7 @@ python ./model/test.py  --label_nc 0
 在執行下列的指令來進行後處理，來滿足大會要求的圖片格式：
 
 ```
-python test_postprocess --source_path {./model/result/road_local/test_latest/synthesis_image}
+python test_postprocess --source_path ./model/result/road_local/test_latest/synthesis_image
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。

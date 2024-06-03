@@ -1,12 +1,12 @@
 # AICUP_GenAI_2024
 
-## 摘要
+## Abstract
 此競賽為 AI CUP 2024 以生成式 AI 建構無人機於自然環境偵察時所需之導航資訊競賽 I－影像資料生成競賽。作為一項生成式AI比賽，目標是要根據給定的標籤圖，生成與真實空拍圖最相似的圖片，來獲得最小化FID分數。
 
 
 科技進步雖便利生活，卻也衍生環境永續挑戰。掌握國土環境資訊是實現可持續發展的關鍵。無人機能高效率偵察地形環境，有助獲取環境數據，促進綠能科技及循環經濟發展。但獲取真實影像成本高昂。生成式AI可基於少量數據生成大量逼真影像，本項目將運用此技術模擬生成無人機視野下的道路及河流景象。
 
-## 問題描述
+## Problem Description
 本競賽題目要求參賽者根據給定的黑白標籤圖，透過生成式AI模型生成對應的真實空拍影像。標籤圖中標記了河流或道路的邊界線及中軸線，需要生成能夠模擬無人機視野下的河流或道路實景影像。
 
 -標籤圖
@@ -39,7 +39,7 @@ FID用於計算真實影像和生成影像之特徵分布的距離，分數越�
 - Linux
 - NVIDIA GPU (11G memory or larger) + CUDA cuDNN
 
-## 環境設定
+## Environment settings
 
 Clone this repo：
 
@@ -50,7 +50,7 @@ conda env create -f environment.yml
 conda activate pix2pixHD
 ```
 
-## 準備資料集
+## Prepare Dataset
 
 首先，從競賽頁面下載訓練資料集並解壓縮。
 
@@ -212,7 +212,20 @@ python test_postprocess --source_path ./result/road_local/test_latest/synthesis_
 
 ## More Training/Test Details
 
-Flags: see ```./options/train_options.py``` and ```./options/base_options.py``` for all the training flags; see ```./options/test_options.py ```and ```./options/base_options.py``` for all the test flags.
+訓練和測試階段的詳細設置和參數,可以分別參考以下文件:
+- 訓練階段設置選項:
+
+  - ```./options/train_options.py```
+  - ```./options/base_options.py```
+
+    上述文件中包含了訓練過程中所有可設置的flags選項。
+
+- 測試階段設置選項:
+
+  - ```./options/test_options.py```
+  - ```./options/base_options.py```
+
+    這些文件則列出了在測試和推理階段可設置的flags選項。
 
 ## Acknowledgments
 

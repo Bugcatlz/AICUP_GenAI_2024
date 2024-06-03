@@ -36,8 +36,7 @@ FID用於計算真實影像和生成影像之特徵分布的距離，分數越�
 ![image](https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/f389d21e-92eb-408e-9e97-7b96f6f24947)
 
 ## Prerequisites
-- Linux or macOS
-- Python 2 or 3
+- Linux
 - NVIDIA GPU (11G memory or larger) + CUDA cuDNN
 
 ## 環境設定
@@ -48,6 +47,7 @@ Clone this repo：
 git clone https://github.com/Bugcatlz/AICUP_GenAI_2024.git
 cd AICUP_GenAI_2024
 conda env create -f environment.yml
+conda activate pix2pixHD
 ```
 
 ## 準備資料集
@@ -56,7 +56,7 @@ conda env create -f environment.yml
 
 接著，將訓練資料集分為河流和道路兩個子集，並進一步劃分為訓練集和驗證集。可以使用以下指令來完成這個步驟：
 ```
-python train_preprocess.py --source_folder {dataset_path} 
+python train_preprocess.py --source_folder {dataset_path}  \
                            --target_folder {split_dataset_path}
 ```
 請將 {dataset_path} 替換為原始資料集的路徑，{split_dataset_path} 替換為劃分後資料集的目標路徑。
@@ -69,38 +69,38 @@ python train_preprocess.py --source_folder {dataset_path}
 首先訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --label_nc 0
-                        --no_instance
-                        --name river_global
-                        --dataroot {split_dataset_path}/river
-                        --save_epoch 5
-                        --netG global
-                        --loadSize 224
-                        --fineSize 224
-                        --no_flip
-                        --save_latest_freq 2000
-                        --ngf 128
-                        --niter 100
-                        --niter_decay 100
+python train.py --name river_global \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {split_dataset_path}/river \
+                --save_epoch 5 \
+                --netG global \
+                --loadSize 224 \
+                --fineSize 224 \
+                --no_flip \
+                --save_latest_freq 2000 \
+                --ngf 128 \
+                --niter 100 \
+                --niter_decay 100
 ```
 
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --label_nc 0
-                        --no_instance
-                        --name river_local
-                        --dataroot {split_dataset_path}/river
-                        --save_epoch 5
-                        --netG local
-                        --loadSize 448
-                        --fineSize 448
-                        --no_flip
-                        --save_latest_freq 2000
-                        --ngf 64
-                        --niter 50
-                        --niter_decay 50
-                        --niter_fix_global 10
+python ./model/train.py --name river_local \
+                        --no_instance \
+                        --label_nc 0 \
+                        --dataroot {split_dataset_path}/river \
+                        --save_epoch 5 \
+                        --netG local \
+                        --loadSize 448 \
+                        --fineSize 448 \
+                        --no_flip \
+                        --save_latest_freq 2000 \
+                        --ngf 64 \
+                        --niter 50 \
+                        --niter_decay 50 \
+                        --niter_fix_global 10 \
                         --load_pretrain ./checkpoints/road_global
 ```
 
@@ -108,18 +108,18 @@ python ./model/train.py --label_nc 0
 同樣地，首先訓練道路資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --label_nc 0
-                        --no_instance
-                        --name road_global
-                        --dataroot {split_dataset_path}/road
-                        --save_epoch 5
-                        --netG global
-                        --loadSize 224
-                        --fineSize 224
-                        --no_flip
-                        --save_latest_freq 2000
-                        --ngf 128
-                        --niter 50
+python ./model/train.py --name road_global \
+                        --no_instance \
+                        --label_nc 0 \
+                        --dataroot {split_dataset_path}/road \
+                        --save_epoch 5 \
+                        --netG global \
+                        --loadSize 224 \
+                        --fineSize 224 \
+                        --no_flip \
+                        --save_latest_freq 2000 \
+                        --ngf 128 \
+                        --niter 50 \
                         --niter_decay 50
 
 ```
@@ -127,23 +127,23 @@ python ./model/train.py --label_nc 0
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --label_nc 0
-                        --no_instance
-                        --name road_local
-                        --dataroot {split_dataset_path}/road
-                        --save_epoch 5
-                        --netG local
-                        --loadSize 448
-                        --fineSize 448
-                        --no_flip
-                        --save_latest_freq 2000
-                        --ngf 64
-                        --niter 50
-                        --niter_decay 50
-                        --niter_fix_global 10
+python ./model/train.py --name road_local \
+                        --no_instance \
+                        --label_nc 0 \
+                        --dataroot {split_dataset_path}/road \
+                        --save_epoch 5 \
+                        --netG local \
+                        --loadSize 448 \
+                        --fineSize 448 \
+                        --no_flip \
+                        --save_latest_freq 2000 \
+                        --ngf 64 \
+                        --niter 50 \
+                        --niter_decay 50 \
+                        --niter_fix_global 10 \
                         --load_pretrain ./checkpoints/road_global
 ```
-若要查看即時的訓練結果，請在 ```./model/checkpoints/{model_name}/web/index.html``` 中察看
+若要查看即時的訓練結果，請在 ```./checkpoints/{model_name}/web/index.html``` 中察看
 
 ## Inference (public、private data)
 
@@ -151,8 +151,8 @@ python ./model/train.py --label_nc 0
 
 接著，將訓練資料集分為河流和道路兩個子集。可以使用以下指令來完成這個步驟：
 ```
-python test_preprocess.py --source_dataset {dataset_path} 
-                          --target_dataset {test_split_dataset_path}
+python test_preprocess.py --source_dataset {dataset_path} \
+                          --target_dataset {test_split_dataset_path} \
                           --train_folder {train_split_dataset_path}
 ```
 
@@ -163,14 +163,14 @@ python test_preprocess.py --source_dataset {dataset_path}
 對於河流資料集可以用以下指令來完成這個步驟：
 
 ```
-python ./model/test.py  --label_nc 0
-                        --no_instance
-                        --name river_local
-                        --dataroot {test_split_dataset_path}/river
-                        --netG local
-                        --loadSize 448
-                        --fineSize 448
-                        --ngf 64
+python ./model/test.py  --name river_local \
+                        --no_instance \
+                        --label_nc 0 \
+                        --dataroot {test_split_dataset_path}/river \
+                        --netG local \
+                        --loadSize 448 \
+                        --fineSize 448 \
+                        --ngf 64 \
                         --save_output
 ```
 
@@ -189,14 +189,14 @@ python test_postprocess --source_path ./model/result/river_local/test_latest/syn
 同理，對於道路資料集可以用以下指令來完成這個步驟：
 
 ```
-python ./model/test.py  --label_nc 0
-                        --no_instance
-                        --name road_local
-                        --dataroot {test_split_dataset_path}/road
-                        --netG local
-                        --loadSize 448
-                        --fineSize 448
-                        --ngf 64
+python ./model/test.py  --name road_local \
+                        --no_instance \
+                        --label_nc 0 \
+                        --dataroot {test_split_dataset_path}/road \
+                        --netG local \
+                        --loadSize 448 \
+                        --fineSize 448 \
+                        --ngf 64 \
                         --save_output
 ```
 
@@ -205,7 +205,7 @@ python ./model/test.py  --label_nc 0
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./model/result/road_local/test_latest/synthesis_image
+python test_postprocess --source_path ./model/result/road_local/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。

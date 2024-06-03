@@ -65,7 +65,7 @@ python train_preprocess.py --source_folder {dataset_path}  \
 
 我們將河流與道路分開訓練，
 
-### 河流資料集訓練
+### River
 首先訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
@@ -104,7 +104,7 @@ python train.py --name river_local \
                 --load_pretrain ./checkpoints/road_global
 ```
 
-### 道路資料集訓練
+### Road
 同樣地，首先訓練道路資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
@@ -158,7 +158,7 @@ python test_preprocess.py --source_dataset {dataset_path} \
 
 再分別對河流與道路資料及進行推論，
 
-## 河流資料集推論
+### River
 
 對於河流資料集可以用以下指令來完成這個步驟：
 
@@ -184,7 +184,7 @@ python test_postprocess --source_path ./result/river_local/test_latest/synthesis
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
 
-### 道路資料集推論
+### Road
 
 同理，對於道路資料集可以用以下指令來完成這個步驟：
 

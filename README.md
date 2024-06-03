@@ -4,7 +4,7 @@
 此競賽為 AI CUP 2024 以生成式 AI 建構無人機於自然環境偵察時所需之導航資訊競賽 I－影像資料生成競賽。作為一項生成式AI比賽，目標是要根據給定的標籤圖，生成與真實空拍圖最相似的圖片，來獲得最小化FID分數。
 
 
-科技進步雖便利生活，卻也衍生環境永續挑戰。掌握國土環境資訊是實現可持續發展的關鍵。無人機能高效率偵察地形環境，有助獲取環境數據，促進綠能科技及循環經濟發展。但獲取真實影像成本高昂。生成式AI可基於少量數據生成大量逼真影像，本項目將運用此技術模擬生成無人機視野下的道路及河流景象。由於結合生成式AI與AI無人機競賽罕見，本競賽期望參賽者深入理解兩者，並將所學應用於實際場景。
+科技進步雖便利生活，卻也衍生環境永續挑戰。掌握國土環境資訊是實現可持續發展的關鍵。無人機能高效率偵察地形環境，有助獲取環境數據，促進綠能科技及循環經濟發展。但獲取真實影像成本高昂。生成式AI可基於少量數據生成大量逼真影像，本項目將運用此技術模擬生成無人機視野下的道路及河流景象。
 
 ## 問題描述
 本競賽題目要求參賽者根據給定的黑白標籤圖，透過生成式AI模型生成對應的真實空拍影像。標籤圖中標記了河流或道路的邊界線及中軸線，需要生成能夠模擬無人機視野下的河流或道路實景影像。
@@ -35,6 +35,11 @@ FID用於計算真實影像和生成影像之特徵分布的距離，分數越�
 最終分數計算的方法為河流影像與道路影像會個別計算一個FID分數，並進行加權評分得到的最終分數FINAL SCORE。
 ![image](https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/f389d21e-92eb-408e-9e97-7b96f6f24947)
 
+## Prerequisites
+- Linux or macOS
+- Python 2 or 3
+- NVIDIA GPU (11G memory or larger) + CUDA cuDNN
+
 ## 環境設定
 
 Clone this repo：
@@ -56,7 +61,7 @@ python train_preprocess.py --source_folder {dataset_path}
 ```
 請將 {dataset_path} 替換為原始資料集的路徑，{split_dataset_path} 替換為劃分後資料集的目標路徑。
 
-## 訓練
+## Training
 
 我們將河流與道路分開訓練，
 
@@ -138,12 +143,13 @@ python ./model/train.py --label_nc 0
                         --niter_fix_global 10
                         --load_pretrain ./checkpoints/road_global
 ```
+若要查看即時的訓練結果，請在 ```./model/checkpoints/{model_name}/web/index.html``` 中察看
 
-## 推論 (public、private data)
+## Inference (public、private data)
 
 首先，從競賽頁面下載測試資料集並解壓縮。
 
-接著，將訓練資料集分為河流和道路兩個子集，並進一步劃分為訓練集和驗證集。可以使用以下指令來完成這個步驟：
+接著，將訓練資料集分為河流和道路兩個子集。可以使用以下指令來完成這個步驟：
 ```
 python test_preprocess.py --source_dataset {dataset_path} 
                           --target_dataset {test_split_dataset_path}
@@ -170,7 +176,7 @@ python ./model/test.py  --label_nc 0
 
 生成的影像會儲存在```./model/result/river_local/test_latest/synthesis_image```
 
-在執行下列的指令來進行後處理，來滿足大會要求的圖片格式：
+在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
 python test_postprocess --source_path ./model/result/river_local/test_latest/synthesis_image
@@ -196,10 +202,18 @@ python ./model/test.py  --label_nc 0
 
 生成的影像會儲存在```./model/result/road_local/test_latest/synthesis_image```
 
-在執行下列的指令來進行後處理，來滿足大會要求的圖片格式：
+在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
 python test_postprocess --source_path ./model/result/road_local/test_latest/synthesis_image
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
+
+## More Training/Test Details
+
+Flags: see ```/model/options/train_options.py``` and ```options/base_options.py``` for all the training flags; see ```options/test_options.py ```and ```options/base_options.py``` for all the test flags.
+
+## Acknowledgments
+
+此專案中的模型修改於 [pix2pixHD](https://github.com/NVIDIA/pix2pixHD)

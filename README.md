@@ -183,7 +183,7 @@ python test.py  --name river_local \
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./result/river_local/test_latest/synthesis_image
+python test_postprocess --source_path ./result/river_local/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。

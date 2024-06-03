@@ -40,13 +40,17 @@ FID用於計算真實影像和生成影像之特徵分布的距離，分數越�
 - Linux
 - NVIDIA GPU (11G memory or larger) + CUDA cuDNN
 
-## Environment settings
+## Getting Started
 
 Clone this repo：
 
 ```
 git clone https://github.com/Bugcatlz/AICUP_GenAI_2024.git
 cd AICUP_GenAI_2024
+```
+
+Setting environment：
+```
 conda env create -f environment.yml
 conda activate pix2pixHD
 ```
@@ -122,7 +126,6 @@ python train.py --name road_global \
                 --ngf 128 \
                 --niter 50 \
                 --niter_decay 50
-
 ```
 
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
@@ -230,4 +233,4 @@ python test_postprocess --source_path ./result/road_local/test_latest/synthesis_
 
 ## Acknowledgments
 
-此專案中的模型修改於 [pix2pixHD](https://github.com/NVIDIA/pix2pixHD)
+此專案中的模型修改於 [pix2pixHD](https://github.com/NVIDIA/pix2pixHD)。

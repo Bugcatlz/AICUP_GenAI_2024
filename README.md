@@ -87,61 +87,61 @@ python train.py --name river_global \
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --name river_local \
-                        --no_instance \
-                        --label_nc 0 \
-                        --dataroot {split_dataset_path}/river \
-                        --save_epoch 5 \
-                        --netG local \
-                        --loadSize 448 \
-                        --fineSize 448 \
-                        --no_flip \
-                        --save_latest_freq 2000 \
-                        --ngf 64 \
-                        --niter 50 \
-                        --niter_decay 50 \
-                        --niter_fix_global 10 \
-                        --load_pretrain ./checkpoints/road_global
+python train.py --name river_local \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {split_dataset_path}/river \
+                --save_epoch 5 \
+                --netG local \
+                --loadSize 448 \
+                --fineSize 448 \
+                --no_flip \
+                --save_latest_freq 2000 \
+                --ngf 64 \
+                --niter 50 \
+                --niter_decay 50 \
+                --niter_fix_global 10 \
+                --load_pretrain ./checkpoints/road_global
 ```
 
 ### 道路資料集訓練
 同樣地，首先訓練道路資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --name road_global \
-                        --no_instance \
-                        --label_nc 0 \
-                        --dataroot {split_dataset_path}/road \
-                        --save_epoch 5 \
-                        --netG global \
-                        --loadSize 224 \
-                        --fineSize 224 \
-                        --no_flip \
-                        --save_latest_freq 2000 \
-                        --ngf 128 \
-                        --niter 50 \
-                        --niter_decay 50
+python train.py --name road_global \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {split_dataset_path}/road \
+                --save_epoch 5 \
+                --netG global \
+                --loadSize 224 \
+                --fineSize 224 \
+                --no_flip \
+                --save_latest_freq 2000 \
+                --ngf 128 \
+                --niter 50 \
+                --niter_decay 50
 
 ```
 
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
 
 ```
-python ./model/train.py --name road_local \
-                        --no_instance \
-                        --label_nc 0 \
-                        --dataroot {split_dataset_path}/road \
-                        --save_epoch 5 \
-                        --netG local \
-                        --loadSize 448 \
-                        --fineSize 448 \
-                        --no_flip \
-                        --save_latest_freq 2000 \
-                        --ngf 64 \
-                        --niter 50 \
-                        --niter_decay 50 \
-                        --niter_fix_global 10 \
-                        --load_pretrain ./checkpoints/road_global
+python train.py --name road_local \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {split_dataset_path}/road \
+                --save_epoch 5 \
+                --netG local \
+                --loadSize 448 \
+                --fineSize 448 \
+                --no_flip \
+                --save_latest_freq 2000 \
+                --ngf 64 \
+                --niter 50 \
+                --niter_decay 50 \
+                --niter_fix_global 10 \
+                --load_pretrain ./checkpoints/road_global
 ```
 若要查看即時的訓練結果，請在 ```./checkpoints/{model_name}/web/index.html``` 中察看
 
@@ -163,23 +163,23 @@ python test_preprocess.py --source_dataset {dataset_path} \
 對於河流資料集可以用以下指令來完成這個步驟：
 
 ```
-python ./model/test.py  --name river_local \
-                        --no_instance \
-                        --label_nc 0 \
-                        --dataroot {test_split_dataset_path}/river \
-                        --netG local \
-                        --loadSize 448 \
-                        --fineSize 448 \
-                        --ngf 64 \
-                        --save_output
+python test.py  --name river_local \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {test_split_dataset_path}/river \
+                --netG local \
+                --loadSize 448 \
+                --fineSize 448 \
+                --ngf 64 \
+                --save_output
 ```
 
-生成的影像會儲存在```./model/result/river_local/test_latest/synthesis_image```
+生成的影像會儲存在```./result/river_local/test_latest/synthesis_image```
 
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./model/result/river_local/test_latest/synthesis_image
+python test_postprocess --source_path ./result/river_local/test_latest/synthesis_image
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
@@ -189,30 +189,30 @@ python test_postprocess --source_path ./model/result/river_local/test_latest/syn
 同理，對於道路資料集可以用以下指令來完成這個步驟：
 
 ```
-python ./model/test.py  --name road_local \
-                        --no_instance \
-                        --label_nc 0 \
-                        --dataroot {test_split_dataset_path}/road \
-                        --netG local \
-                        --loadSize 448 \
-                        --fineSize 448 \
-                        --ngf 64 \
-                        --save_output
+python test.py  --name road_local \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {test_split_dataset_path}/road \
+                --netG local \
+                --loadSize 448 \
+                --fineSize 448 \
+                --ngf 64 \
+                --save_output
 ```
 
-生成的影像會儲存在```./model/result/road_local/test_latest/synthesis_image```
+生成的影像會儲存在```result/road_local/test_latest/synthesis_image```
 
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./model/result/road_local/test_latest/synthesis_image \
+python test_postprocess --source_path ./result/road_local/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
 
 ## More Training/Test Details
 
-Flags: see ```/model/options/train_options.py``` and ```options/base_options.py``` for all the training flags; see ```options/test_options.py ```and ```options/base_options.py``` for all the test flags.
+Flags: see ```./options/train_options.py``` and ```./options/base_options.py``` for all the training flags; see ```./options/test_options.py ```and ```./options/base_options.py``` for all the test flags.
 
 ## Acknowledgments
 

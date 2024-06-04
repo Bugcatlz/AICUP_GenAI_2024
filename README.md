@@ -88,7 +88,7 @@ python train_preprocess.py --border_size 448 \
 我們將河流與道路分開訓練，
 
 ### River
-首先訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
+首先在低分辨率下訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
 python train.py --name river_global_448p \
@@ -102,11 +102,14 @@ python train.py --name river_global_448p \
                 --no_flip \
                 --save_latest_freq 2000 \
                 --ngf 128 \
+                --num_D 2 \
                 --niter 100 \
                 --niter_decay 100
 ```
 
-訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
+訓練完成後，再將訓練後Global Generator的模型作為Local Enhancer的預訓練模型，並在高分辨率下進行訓練。
+
+使用以下指令來完成這個步驟：
 
 ```
 python train.py --name river_local_448p \
@@ -120,6 +123,7 @@ python train.py --name river_local_448p \
                 --no_flip \
                 --save_latest_freq 2000 \
                 --ngf 64 \
+                --num_D 2 \
                 --niter 50 \
                 --niter_decay 50 \
                 --niter_fix_global 10 \
@@ -127,7 +131,7 @@ python train.py --name river_local_448p \
 ```
 
 ### Road
-同樣地，首先訓練道路資料集的Global Generator。使用以下指令來完成這個步驟：
+同樣地，首先低分辨率下訓練道路資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
 python train.py --name road_global_448p \
@@ -141,11 +145,14 @@ python train.py --name road_global_448p \
                 --no_flip \
                 --save_latest_freq 2000 \
                 --ngf 128 \
+                --num_D 2 \
                 --niter 50 \
                 --niter_decay 50
 ```
 
-訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
+訓練完成後，再將訓練後Global Generator的模型作為Local Enhancer的預訓練模型，並在高分辨率下進行訓練。
+
+使用以下指令來完成這個步驟：
 
 ```
 python train.py --name road_local_448p \
@@ -159,6 +166,7 @@ python train.py --name road_local_448p \
                 --no_flip \
                 --save_latest_freq 2000 \
                 --ngf 64 \
+                --num_D 2 \
                 --niter 50 \
                 --niter_decay 50 \
                 --niter_fix_global 10 \

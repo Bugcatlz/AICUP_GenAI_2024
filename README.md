@@ -127,7 +127,7 @@ python train.py --name river_local_448p \
                 --niter 50 \
                 --niter_decay 50 \
                 --niter_fix_global 10 \
-                --load_pretrain ./checkpoints/road_global_448p
+                --load_pretrain ./checkpoints/river_global_448p
 ```
 
 ### Road
@@ -181,8 +181,8 @@ python train.py --name road_local_448p \
 接著，將訓練資料集分為河流和道路兩個子集。可以使用以下指令來完成這個步驟：
 ```
 python test_preprocess.py --border_size 448 \
-                          --source_dataset {dataset_path} \
-                          --target_dataset {test_split_dataset_path} \
+                          --source_folder {dataset_path} \
+                          --target_folder {test_split_dataset_path} \
                           --train_folder {train_split_dataset_path}
 ```
 
@@ -204,15 +204,15 @@ python test.py  --name river_local_448p \
                 --save_output
 ```
 
-生成的影像會儲存在```./result/river_local_448p/test_latest/synthesis_image```
+生成的影像會儲存在```./results/river_local_448p/test_latest/synthesized_image```
 
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python postprocess --source_path ./result/river_local_448p/test_latest/synthesis_image \
-                        --target_path {target_path}
+python postprocess.py --source_folder ./results/river_local_448p/test_latest/synthesis_image \
+                        --target_folder {target_path}
 ```
-請將 {target_path} 替換為儲存生成結果的目標路徑。
+請將 {target_folder} 替換為儲存生成結果的資料夾。
 
 ### Road
 
@@ -230,15 +230,15 @@ python test.py  --name road_local_448p \
                 --save_output
 ```
 
-生成的影像會儲存在```result/road_local_448p/test_latest/synthesis_image```
+生成的影像會儲存在```results/road_local_448p/test_latest/synthesized_image```
 
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python postprocess --source_path ./result/road_local_448p/test_latest/synthesis_image \
-                        --target_path {target_path}
+python postprocess.py --source_folder ./results/road_local_448p/test_latest/synthesis_image \
+                        --target_folder {target_path}
 ```
-請將 {target_path} 替換為儲存生成結果的目標路徑。
+請將 {target_folder} 替換為儲存生成結果的資料夾。
 
 ## More Training/Test Details
 

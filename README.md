@@ -65,8 +65,8 @@ conda activate pix2pixHD
 |river_local_448p|[Link](https://mega.nz/file/rFcBHTiR#Xf6sYvPiylaBdnBMCS94UI97RrsOKNgCoQ-vDPTmZmk)|
 |road_global_448p|[Link](https://mega.nz/file/iFk0kIjS#xRNXvvN1tq0QN6YSeZX9JzetlFg7PgDMoDh4c56Fdss)|
 |road_local_448p|[LinK](https://mega.nz/file/KUE32I4Z#Qw_DAm-Gn8RSqFLLIBhxT7epDhV2GfDsGPOZOZK0boU)|
-|river_local_512p|[Link](https://mega.nz/file/KdsCiT5K#l9NSzfSpEo4GBa64yauD2-xZ1aEMZTcW8W-_UVqcuoo)|
-|road_local_512p|[Link](https://mega.nz/file/aNlA0AiT#c1jUlj9_gLBuonnKN8Ki0F6d3fR4tIqH-FhMnxAJKzA)|
+|river_local_512p|[Link](https://mega.nz/file/OFsD1Loa#MOtrjvifXbBFgWRwvjuVM62j7oP5Xu69yUABUgSlORE)|
+|road_local_512p|[Link](https://mega.nz/file/fNVSFSga#aqH2gCGxkinI9aQQzE_IhPbq6UyYFgdidB-zbkdd3fk)|
 
 注：512p的模型在preprocess時要將```--border_size```設為512，且在inference時將```--loadSize```與```fineSize```設為512。
 

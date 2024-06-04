@@ -60,7 +60,7 @@ def main():
 
     source_folder = args.source_folder
     target_folder = args.target_folder
-    border_size = args.border_size
+    border_size = int(args.border_size)
 
     source_img_folder = os.path.join(source_folder, 'img')
     source_label_folder = os.path.join(source_folder, 'label_img')

@@ -100,7 +100,7 @@ def main():
     target_folder = args.target_folder
     train_folder = args.train_folder
     source_folder = os.path.join(source_folder, 'label_img')
-    border_size = args.border_size
+    border_size = int(args.border_size)
 
     river_folder = os.path.join(target_folder, 'river/test_A')
     road_folder = os.path.join(target_folder, 'road/test_A')

@@ -47,8 +47,6 @@ def add_border_to_folder(border_size, folder, color):
             image_with_border = cv2.copyMakeBorder(image, top_border, bottom_border, left_border, right_border,
                                                    cv2.BORDER_CONSTANT, value=color)
             output_path = os.path.join(folder, filename)
-            if os.path.exists(output_path):
-                os.remove(output_path)
             cv2.imwrite(output_path, image_with_border)
 
 def main():

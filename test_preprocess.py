@@ -78,13 +78,8 @@ def process_images(source_dir, img_label_dir, target_dir):
 
     for imgA_path, result in zip(args, results):
         most_similar_image_path, min_distance = result
-        if most_similar_image_path:
-            # print(f"L1 距離: {min_distance:.2f}")
-            target_path = os.path.join(target_dir, os.path.basename(imgA_path[0]))
-            shutil.copy(most_similar_image_path, target_path)
-            print(f"已複製並重命名 {most_similar_image_path} 為 {target_path}")
-        else:
-            print(f"找不到與 {imgA_path[0]} 相似的圖像")
+        target_path = os.path.join(target_dir, os.path.basename(imgA_path[0]))
+        shutil.copy(most_similar_image_path, target_path)
 
 def main():
     parser = argparse.ArgumentParser()

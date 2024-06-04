@@ -133,7 +133,7 @@ class Visualizer():
     # save image to the disk
     def save_synthesized_image(self, image_dir, visuals, image_path):
         short_path = ntpath.basename(image_path[0])
-        name = os.path.splitext(short_path)[0]
+        name = os.path.splitext(short_path)[0] + ".jpg"
 
         image_numpy = visuals['synthesized_image']
         save_path = os.path.join(image_dir, name)

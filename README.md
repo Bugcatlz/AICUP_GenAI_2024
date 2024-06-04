@@ -34,6 +34,7 @@ FID用於計算真實影像和生成影像之特徵分布的距離，分數越�
 
 
 最終分數計算的方法為河流影像與道路影像會個別計算一個FID分數，並進行加權評分得到的最終分數FINAL SCORE。
+
 ![image](https://github.com/Bugcatlz/AICUP_GenAI_2024/assets/90192320/f389d21e-92eb-408e-9e97-7b96f6f24947)
 
 ## Prerequisites
@@ -61,10 +62,25 @@ conda activate pix2pixHD
 
 接著，將訓練資料集分為河流和道路兩個子集，並進一步劃分為訓練集和驗證集。可以使用以下指令來完成這個步驟：
 ```
-python train_preprocess.py --source_folder {dataset_path}  \
-                           --target_folder {split_dataset_path}
+python train_preprocess.py --border_size 448 \
+                           --source_folder {dataset_path}  \
+                           --target_folder {train_split_dataset_path}
 ```
-請將 {dataset_path} 替換為原始資料集的路徑，{split_dataset_path} 替換為劃分後資料集的目標路徑。
+請將 {dataset_path} 替換為原始資料集的路徑，{train_split_dataset_path} 替換為劃分後資料集的目標路徑。
+
+## Pretrained Model
+
+將解壓縮後的資料夾放置在```./checkpoints```內
+| Model Name|Download Link|
+|-|-|
+|river_global_448p|[Link](https://mega.nz/file/eZVnEZ5I#4O3m6hmb9P0BjTXVyDFZE_VRIaet9yeAYDFaP035wPc)|
+|river_local_448p|[Link](https://mega.nz/file/rFcBHTiR#Xf6sYvPiylaBdnBMCS94UI97RrsOKNgCoQ-vDPTmZmk)|
+|road_global_448p|[Link](https://mega.nz/file/iFk0kIjS#xRNXvvN1tq0QN6YSeZX9JzetlFg7PgDMoDh4c56Fdss)|
+|road_local_448p|[LinK](https://mega.nz/file/KUE32I4Z#Qw_DAm-Gn8RSqFLLIBhxT7epDhV2GfDsGPOZOZK0boU)|
+|river_local_512p|[Link](https://mega.nz/file/KdsCiT5K#l9NSzfSpEo4GBa64yauD2-xZ1aEMZTcW8W-_UVqcuoo)|
+|road_local_512p|[Link](https://mega.nz/file/aNlA0AiT#c1jUlj9_gLBuonnKN8Ki0F6d3fR4tIqH-FhMnxAJKzA)|
+
+注：512p的模型在preprocess時要將```--border_size```設為512，且在inference時將```--loadSize```與```fineSize```設為512。
 
 ## Training
 
@@ -74,10 +90,10 @@ python train_preprocess.py --source_folder {dataset_path}  \
 首先訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
-python train.py --name river_global \
+python train.py --name river_global_448p \
                 --no_instance \
                 --label_nc 0 \
-                --dataroot {split_dataset_path}/river \
+                --dataroot {train_split_dataset_path}/river \
                 --save_epoch 5 \
                 --netG global \
                 --loadSize 224 \
@@ -92,10 +108,10 @@ python train.py --name river_global \
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
 
 ```
-python train.py --name river_local \
+python train.py --name river_local_448p \
                 --no_instance \
                 --label_nc 0 \
-                --dataroot {split_dataset_path}/river \
+                --dataroot {train_split_dataset_path}/river \
                 --save_epoch 5 \
                 --netG local \
                 --loadSize 448 \
@@ -106,17 +122,17 @@ python train.py --name river_local \
                 --niter 50 \
                 --niter_decay 50 \
                 --niter_fix_global 10 \
-                --load_pretrain ./checkpoints/road_global
+                --load_pretrain ./checkpoints/road_global_448p
 ```
 
 ### Road
 同樣地，首先訓練道路資料集的Global Generator。使用以下指令來完成這個步驟：
 
 ```
-python train.py --name road_global \
+python train.py --name road_global_448p \
                 --no_instance \
                 --label_nc 0 \
-                --dataroot {split_dataset_path}/road \
+                --dataroot {train_split_dataset_path}/road \
                 --save_epoch 5 \
                 --netG global \
                 --loadSize 224 \
@@ -131,10 +147,10 @@ python train.py --name road_global \
 訓練完成後，再將訓練後的模型作為Local Enhancer的預訓練模型。使用以下指令來完成這個步驟：
 
 ```
-python train.py --name road_local \
+python train.py --name road_local_448p \
                 --no_instance \
                 --label_nc 0 \
-                --dataroot {split_dataset_path}/road \
+                --dataroot {train_split_dataset_path}/road \
                 --save_epoch 5 \
                 --netG local \
                 --loadSize 448 \
@@ -145,7 +161,7 @@ python train.py --name road_local \
                 --niter 50 \
                 --niter_decay 50 \
                 --niter_fix_global 10 \
-                --load_pretrain ./checkpoints/road_global
+                --load_pretrain ./checkpoints/road_global_448p
 ```
 若要查看即時的訓練結果，請在 ```./checkpoints/{model_name}/web/index.html``` 中察看
 
@@ -155,7 +171,8 @@ python train.py --name road_local \
 
 接著，將訓練資料集分為河流和道路兩個子集。可以使用以下指令來完成這個步驟：
 ```
-python test_preprocess.py --source_dataset {dataset_path} \
+python test_preprocess.py --border_size 448 \
+                          --source_dataset {dataset_path} \
                           --target_dataset {test_split_dataset_path} \
                           --train_folder {train_split_dataset_path}
 ```
@@ -167,7 +184,7 @@ python test_preprocess.py --source_dataset {dataset_path} \
 對於河流資料集可以用以下指令來完成這個步驟：
 
 ```
-python test.py  --name river_local \
+python test.py  --name river_local_448p \
                 --no_instance \
                 --label_nc 0 \
                 --dataroot {test_split_dataset_path}/river \
@@ -178,12 +195,12 @@ python test.py  --name river_local \
                 --save_output
 ```
 
-生成的影像會儲存在```./result/river_local/test_latest/synthesis_image```
+生成的影像會儲存在```./result/river_local_448p/test_latest/synthesis_image```
 
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./result/river_local/test_latest/synthesis_image \
+python test_postprocess --source_path ./result/river_local_448p/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
@@ -193,7 +210,7 @@ python test_postprocess --source_path ./result/river_local/test_latest/synthesis
 同理，對於道路資料集可以用以下指令來完成這個步驟：
 
 ```
-python test.py  --name road_local \
+python test.py  --name road_local_448p \
                 --no_instance \
                 --label_nc 0 \
                 --dataroot {test_split_dataset_path}/road \
@@ -204,12 +221,12 @@ python test.py  --name road_local \
                 --save_output
 ```
 
-生成的影像會儲存在```result/road_local/test_latest/synthesis_image```
+生成的影像會儲存在```result/road_local_448p/test_latest/synthesis_image```
 
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./result/road_local/test_latest/synthesis_image \
+python test_postprocess --source_path ./result/road_local_448p/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。

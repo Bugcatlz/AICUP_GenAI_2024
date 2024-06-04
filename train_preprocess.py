@@ -34,16 +34,16 @@ def modified_data_type(train_folder_img, train_folder_label):
                 new_file_path = os.path.join(folder_path, filename.replace('.png', '.jpg'))
                 os.rename(old_file_path, new_file_path)
 
-def add_border_to_folder(folder, color):
+def add_border_to_folder(border_size, folder, color):
     """為資料夾中的圖像添加邊框"""
     for filename in os.listdir(folder):
         if filename.endswith('.jpg') or filename.endswith('.png'):
             image_path = os.path.join(folder, filename)
             image = cv2.imread(image_path)
-            top_border = (448 - image.shape[0]) // 2
-            bottom_border = 448 - image.shape[0] - top_border
-            left_border = (448 - image.shape[1]) // 2
-            right_border = 448 - image.shape[1] - left_border
+            top_border = (border_size - image.shape[0]) // 2
+            bottom_border = border_size - image.shape[0] - top_border
+            left_border = (border_size - image.shape[1]) // 2
+            right_border = border_size - image.shape[1] - left_border
             image_with_border = cv2.copyMakeBorder(image, top_border, bottom_border, left_border, right_border,
                                                    cv2.BORDER_CONSTANT, value=color)
             output_path = os.path.join(folder, filename)
@@ -55,10 +55,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source_folder', required=True, help='源資料夾路徑')
     parser.add_argument('--target_folder', required=True, help='目標資料夾路徑')
+    parser.add_argument('--border_size', required=True, help='添加邊框後的圖片大小')
     args = parser.parse_args()
 
     source_folder = args.source_folder
     target_folder = args.target_folder
+    border_size = args.border_size
 
     source_img_folder = os.path.join(source_folder, 'img')
     source_label_folder = os.path.join(source_folder, 'label_img')
@@ -126,14 +128,14 @@ def main():
     modified_data_type(ro_test_folder_img, ro_test_folder_label)
 
     # 添加邊框
-    add_border_to_folder(ri_train_folder_img, (0, 0, 0))  # black border
-    add_border_to_folder(ri_train_folder_label, (0, 0, 255))  # red border
-    add_border_to_folder(ri_test_folder_img, (0, 0, 0))  # black border
-    add_border_to_folder(ri_test_folder_label, (0, 0, 255))  # red border
-    add_border_to_folder(ro_train_folder_img, (0, 0, 0))  # black border
-    add_border_to_folder(ro_train_folder_label, (0, 0, 255))  # red border
-    add_border_to_folder(ro_test_folder_img, (0, 0, 0))  # black border
-    add_border_to_folder(ro_test_folder_label, (0, 0, 255))  # red border
+    add_border_to_folder(border_size, ri_train_folder_img, (0, 0, 0))  # black border
+    add_border_to_folder(border_size, ri_train_folder_label, (0, 0, 255))  # red border
+    add_border_to_folder(border_size, ri_test_folder_img, (0, 0, 0))  # black border
+    add_border_to_folder(border_size, ri_test_folder_label, (0, 0, 255))  # red border
+    add_border_to_folder(border_size, ro_train_folder_img, (0, 0, 0))  # black border
+    add_border_to_folder(border_size, ro_train_folder_label, (0, 0, 255))  # red border
+    add_border_to_folder(border_size, ro_test_folder_img, (0, 0, 0))  # black border
+    add_border_to_folder(border_size, ro_test_folder_label, (0, 0, 255))  # red border
 
 if __name__ == '__main__':
     main()

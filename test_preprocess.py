@@ -5,17 +5,17 @@ import argparse
 import numpy as np
 from multiprocessing import Pool
 
-def add_border_to_folder(folder):
+def add_border_to_folder(border_size, folder):
     """為資料夾中的圖像添加邊框"""
     for filename in os.listdir(folder):
         if filename.endswith('.jpg') or filename.endswith('.png'):
             image_path = os.path.join(folder, filename)
             image = cv2.imread(image_path)
 
-            top_border = (448 - image.shape[0]) // 2
-            bottom_border = 448 - image.shape[0] - top_border
-            left_border = (448 - image.shape[1]) // 2
-            right_border = 448 - image.shape[1] - left_border
+            top_border = (border_size - image.shape[0]) // 2
+            bottom_border = border_size - image.shape[0] - top_border
+            left_border = (border_size - image.shape[1]) // 2
+            right_border = border_size - image.shape[1] - left_border
 
             image_with_border = cv2.copyMakeBorder(image, top_border, bottom_border, left_border, right_border, cv2.BORDER_CONSTANT, value=(0, 0, 255))
 
@@ -93,19 +93,21 @@ def main():
     parser.add_argument('--source_folder', required=True, help='源資料夾路徑')
     parser.add_argument('--target_folder', required=True, help='目標資料夾路徑')
     parser.add_argument('--train_folder', required=True, help='訓練資料夾路徑')
+    parser.add_argument('--border_size', required=True, help='添加邊框後的圖片大小')
     args = parser.parse_args()
 
     source_folder = args.source_folder
     target_folder = args.target_folder
     train_folder = args.train_folder
     source_folder = os.path.join(source_folder, 'label_img')
+    border_size = args.border_size
 
     river_folder = os.path.join(target_folder, 'river/test_A')
     road_folder = os.path.join(target_folder, 'road/test_A')
 
     move_files(source_folder, river_folder, road_folder)
-    add_border_to_folder(river_folder)
-    add_border_to_folder(road_folder)
+    add_border_to_folder(border_size, river_folder)
+    add_border_to_folder(border_size, road_folder)
 
     ri_train_folder = os.path.join(train_folder, 'river', 'train_A')
     ro_train_folder = os.path.join(train_folder, 'road', 'train_A')

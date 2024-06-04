@@ -209,7 +209,7 @@ python test.py  --name river_local_448p \
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python postprocess.py --source_folder ./results/river_local_448p/test_latest/synthesis_image \
+python postprocess.py --source_folder ./results/river_local_448p/test_latest/synthesized_image \
                         --target_folder {target_path}
 ```
 請將 {target_folder} 替換為儲存生成結果的資料夾。
@@ -235,7 +235,7 @@ python test.py  --name road_local_448p \
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python postprocess.py --source_folder ./results/road_local_448p/test_latest/synthesis_image \
+python postprocess.py --source_folder ./results/road_local_448p/test_latest/synthesized_image \
                         --target_folder {target_path}
 ```
 請將 {target_folder} 替換為儲存生成結果的資料夾。

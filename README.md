@@ -59,14 +59,14 @@ conda activate pix2pixHD
 ## Pretrained Model
 
 將解壓縮後的資料夾放置在```./checkpoints```內
-| Model Name|Download Link|
-|-|-|
-|river_global_448p|[Link](https://mega.nz/file/eZVnEZ5I#4O3m6hmb9P0BjTXVyDFZE_VRIaet9yeAYDFaP035wPc)|
-|river_local_448p|[Link](https://mega.nz/file/rFcBHTiR#Xf6sYvPiylaBdnBMCS94UI97RrsOKNgCoQ-vDPTmZmk)|
-|road_global_448p|[Link](https://mega.nz/file/iFk0kIjS#xRNXvvN1tq0QN6YSeZX9JzetlFg7PgDMoDh4c56Fdss)|
-|road_local_448p|[LinK](https://mega.nz/file/KUE32I4Z#Qw_DAm-Gn8RSqFLLIBhxT7epDhV2GfDsGPOZOZK0boU)|
-|river_local_512p|[Link](https://mega.nz/file/OFsD1Loa#MOtrjvifXbBFgWRwvjuVM62j7oP5Xu69yUABUgSlORE)|
-|road_local_512p|[Link](https://mega.nz/file/fNVSFSga#aqH2gCGxkinI9aQQzE_IhPbq6UyYFgdidB-zbkdd3fk)|
+| Model Name|Description|Download Link|
+|-|-|-|
+|river_global_448p|Two-Stage Training|[Link](https://mega.nz/file/eZVnEZ5I#4O3m6hmb9P0BjTXVyDFZE_VRIaet9yeAYDFaP035wPc)|
+|river_local_448p|Two-Stage Training|[Link](https://mega.nz/file/rFcBHTiR#Xf6sYvPiylaBdnBMCS94UI97RrsOKNgCoQ-vDPTmZmk)|
+|road_global_448p|Two-Stage Training|[Link](https://mega.nz/file/iFk0kIjS#xRNXvvN1tq0QN6YSeZX9JzetlFg7PgDMoDh4c56Fdss)|
+|road_local_448p|Two-Stage Training|[LinK](https://mega.nz/file/KUE32I4Z#Qw_DAm-Gn8RSqFLLIBhxT7epDhV2GfDsGPOZOZK0boU)|
+|river_local_512p|Unified Training|[Link](https://mega.nz/file/OFsD1Loa#MOtrjvifXbBFgWRwvjuVM62j7oP5Xu69yUABUgSlORE)|
+|road_local_512p|Unified Training|[Link](https://mega.nz/file/fNVSFSga#aqH2gCGxkinI9aQQzE_IhPbq6UyYFgdidB-zbkdd3fk)|
 
 注：512p的模型在preprocess時要將```--border_size```設為512，且在inference時將```--loadSize```與```fineSize```設為512。
 
@@ -83,9 +83,11 @@ python train_preprocess.py --border_size 448 \
 請將 {dataset_path} 替換為原始資料集的路徑，{train_split_dataset_path} 替換為劃分後資料集的目標路徑。
 
 
-## Training
+## Training (Two-Stage)
 
-我們將河流與道路分開訓練，
+我們將河流與道路分開訓練，我們先訓練Global Generator再訓練Local Enhancer。
+
+我們的實驗結果表明Two-Stage Training的訓練圖像品質優於Unified Training，並且Two-Stage Training為pix2pixHD論文所使用的訓練方式。
 
 ### River
 首先在低分辨率下訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
@@ -172,7 +174,48 @@ python train.py --name road_local_448p \
                 --niter_fix_global 10 \
                 --load_pretrain ./checkpoints/road_global_448p
 ```
-若要查看即時的訓練結果，請在 ```./checkpoints/{model_name}/web/index.html``` 中察看
+若要查看即時的訓練結果，請在 ```./checkpoints/{model_name}/web/index.html``` 中察看。
+
+## Training (Unified Training)
+
+我們將河流與道路分開訓練，但我們直接將Global Generator與Local Enhancer統一訓練。
+
+### River
+```
+python train.py --name river_local_448p \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {train_split_dataset_path}/river \
+                --save_epoch 5 \
+                --netG local \
+                --loadSize 448 \
+                --fineSize 448 \
+                --no_flip \
+                --save_latest_freq 2000 \
+                --ngf 64 \
+                --num_D 2 \
+                --niter 100 \
+                --niter_decay 100
+```
+
+### Road
+
+```
+python train.py --name road_local_448p \
+                --no_instance \
+                --label_nc 0 \
+                --dataroot {train_split_dataset_path}/road \
+                --save_epoch 5 \
+                --netG local \
+                --loadSize 448 \
+                --fineSize 448 \
+                --no_flip \
+                --save_latest_freq 2000 \
+                --ngf 64 \
+                --num_D 2 \
+                --niter 100 \
+                --niter_decay 100
+```
 
 ## Inference (public、private data)
 

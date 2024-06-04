@@ -56,18 +56,6 @@ conda env create -f environment.yml
 conda activate pix2pixHD
 ```
 
-## Prepare Dataset
-
-首先，從競賽頁面下載訓練資料集並解壓縮。
-
-接著，將訓練資料集分為河流和道路兩個子集，並進一步劃分為訓練集和驗證集。可以使用以下指令來完成這個步驟：
-```
-python train_preprocess.py --border_size 448 \
-                           --source_folder {dataset_path}  \
-                           --target_folder {train_split_dataset_path}
-```
-請將 {dataset_path} 替換為原始資料集的路徑，{train_split_dataset_path} 替換為劃分後資料集的目標路徑。
-
 ## Pretrained Model
 
 將解壓縮後的資料夾放置在```./checkpoints```內
@@ -81,6 +69,19 @@ python train_preprocess.py --border_size 448 \
 |road_local_512p|[Link](https://mega.nz/file/aNlA0AiT#c1jUlj9_gLBuonnKN8Ki0F6d3fR4tIqH-FhMnxAJKzA)|
 
 注：512p的模型在preprocess時要將```--border_size```設為512，且在inference時將```--loadSize```與```fineSize```設為512。
+
+## Prepare Training Dataset
+
+首先，從競賽頁面下載訓練資料集並解壓縮。
+
+接著，將訓練資料集分為河流和道路兩個子集，並進一步劃分為訓練集和驗證集。可以使用以下指令來完成這個步驟：
+```
+python train_preprocess.py --border_size 448 \
+                           --source_folder {dataset_path}  \
+                           --target_folder {train_split_dataset_path}
+```
+請將 {dataset_path} 替換為原始資料集的路徑，{train_split_dataset_path} 替換為劃分後資料集的目標路徑。
+
 
 ## Training
 
@@ -200,7 +201,7 @@ python test.py  --name river_local_448p \
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./result/river_local_448p/test_latest/synthesis_image \
+python postprocess --source_path ./result/river_local_448p/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。
@@ -226,7 +227,7 @@ python test.py  --name road_local_448p \
 在執行下列的指令來進行後處理，來滿足競賽要求的圖片格式：
 
 ```
-python test_postprocess --source_path ./result/road_local_448p/test_latest/synthesis_image \
+python postprocess --source_path ./result/road_local_448p/test_latest/synthesis_image \
                         --target_path {target_path}
 ```
 請將 {target_path} 替換為儲存生成結果的目標路徑。

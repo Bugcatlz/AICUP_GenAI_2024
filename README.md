@@ -1,7 +1,7 @@
 # AICUP_GenAI_2024
 以生成式AI建構無人機於自然環境偵察時所需之導航資訊競賽 I － 影像資料生成競賽
 
-## Competition Description
+## Competition Background
 此競賽為 AI CUP 2024 以生成式 AI 建構無人機於自然環境偵察時所需之導航資訊競賽 I－影像資料生成競賽。作為一項生成式AI比賽，目標是要根據給定的標籤圖，生成與真實空拍圖最相似的圖片，來獲得最小化FID分數。
 
 
@@ -80,7 +80,7 @@ python train_preprocess.py --border_size 448 \
                            --source_folder {dataset_path}  \
                            --target_folder {train_split_dataset_path}
 ```
-請將 {dataset_path} 替換為原始資料集的路徑，{train_split_dataset_path} 替換為劃分後資料集的目標路徑。
+請將 {dataset_path} 替換為訓練資料集解壓縮後```Traing dataset```資料夾的路徑，{train_split_dataset_path} 替換為劃分後資料集的目標路徑。
 
 
 ## Training (Two-Stage)
@@ -229,7 +229,7 @@ python test_preprocess.py --border_size 448 \
                           --train_folder {train_split_dataset_path}
 ```
 
-再分別對河流與道路資料及進行推論，
+請將{dataset_path}替換為訓練資料集解壓縮後```label_img```資料夾的路徑。
 
 ### River
 

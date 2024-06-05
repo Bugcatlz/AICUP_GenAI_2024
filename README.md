@@ -87,8 +87,6 @@ python train_preprocess.py --border_size 448 \
 
 我們將河流與道路分開訓練，我們先訓練Global Generator再訓練Local Enhancer。
 
-我們的實驗結果表明Two-Stage Training的訓練圖像品質優於Unified Training，並且Two-Stage Training為pix2pixHD論文所使用的訓練方式。
-
 ### River
 首先在低分辨率下訓練河流資料集的Global Generator。使用以下指令來完成這個步驟：
 

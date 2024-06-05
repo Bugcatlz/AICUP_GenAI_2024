@@ -215,6 +215,8 @@ python train.py --name road_local_448p \
                 --niter_decay 100
 ```
 
+若要查看即時的訓練結果，請在 ```./checkpoints/{model_name}/web/index.html``` 中察看。
+
 ## Inference (public、private data)
 
 首先，從競賽頁面下載測試資料集並解壓縮。

@@ -68,7 +68,7 @@ conda activate pix2pixHD
 |river_local_512p|Unified Training|[Link](https://mega.nz/file/OFsD1Loa#MOtrjvifXbBFgWRwvjuVM62j7oP5Xu69yUABUgSlORE)|
 |road_local_512p|Unified Training|[Link](https://mega.nz/file/fNVSFSga#aqH2gCGxkinI9aQQzE_IhPbq6UyYFgdidB-zbkdd3fk)|
 
-注：512p的模型在preprocess時要將```--border_size```設為512，且在inference時將```--loadSize```與```--fineSize```設為512。
+註：512p的模型在preprocess時要將```--border_size```設為512，且在inference時將```--loadSize```與```--fineSize```設為512。
 
 ## Prepare Training Dataset
 
